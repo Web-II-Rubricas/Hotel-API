@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBooking, deleteBooking, getBooking, getBookings, updateBooking } from "../controllers/bookings.controller.js";
+import { createBookings, deleteBookingsId, getBookings, getBookingsId, updateBookings } from "../controllers/bookings.controller.js";
 
 
 const router = Router()
@@ -7,15 +7,15 @@ const router = Router()
 //----------------------------------- RUTAS DE BOOKINGS-------------------------------------
 //Cosultar
 router.get('/bookings', getBookings)
-router.get('/bookings/:codigo', getBooking)
+router.get('/bookings/:codigo', getBookingsId)
 
 //Agregar
-router.post('/bookings', createBooking)
+router.post('/bookings', createBookings)
 
 //Actualizar
-router.patch('/bookings/:codigo', updateBooking)
+router.patch('/bookings/:codigo', updateBookings)
 
 //Eliminar
-router.delete('/bookings/:codigo', deleteBooking)
+router.delete('/bookings/:codigo', deleteBookingsId)
 
 export default router;
