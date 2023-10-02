@@ -24,18 +24,19 @@ export const getBookingsId = async (req, res) =>{
 }
 
 export const createBookings=async(req,res)=>{
-    
         const { codigo } = req.params
         const { codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida } = req.body;
+        
         try {
+        const [roomsrows] = await pool.query('SELECT * FROM rooms  WHERE id=?',[codigo_habitacion]);
 
         const [rows] = await pool.query('INSERT INTO bookings (codigo, codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida ) VALUES (?, ?, ?, ?, ?, ?, ?)'
             , [codigo, codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida]);
 
-        if (rows.affectedRows === 1) {
-            res.status(201).json({ message: 'Reserva creada correctamente' });
+        if (roomsrows.length === 0) {
+            res.status(500).json({message: 'No se pudo crear la reserva'});
         } else {
-            res.status(500).json({ message: 'No se pudo crear la reserva' });
+            res.status(201).json({ message: 'Reserva creada correctamente' });
         }
     } catch (error) {
         res.status(500).json({ message: 'Ha ocurrido un error' });
