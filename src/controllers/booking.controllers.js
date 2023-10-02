@@ -32,13 +32,11 @@ export const createBookings=async(req,res)=>{
         console.log(req.params)
         const { codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida } = req.body;
 
-        // Se Realiza una validación básica de los datos aquí.
 
         const [rows] = await pool.query('INSERT INTO booking (codigo, codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida ) VALUES (?, ?, ?, ?, ?, ?, ?)'
             , [codigo, codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida]);
 
         if (rows.affectedRows === 1) {
-            // El registro se creó exitosamente.
             res.status(201).json({ message: 'Reserva creada correctamente' });
         } else {
             res.status(500).json({ message: 'No se pudo crear la reserva' });
@@ -54,13 +52,11 @@ export const updateBookings=async(req,res)=>{
         const { codigo } = req.params;
         const { codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida } = req.body;
 
-        // Se Realiza una validación básica de los datos aquí.
 
         const [rows] = await pool.query('UPDATE booking SET codigo_habitacion=?, nombre_cliente=?, telefono_cliente=?, fecha_reservacion=?, fecha_entrada=? ,fecha_salida=? WHERE codigo=?',
             [codigo_habitacion, nombre_cliente, telefono_cliente, fecha_reservacion, fecha_entrada, fecha_salida, codigo]);
 
         if (rows.affectedRows === 1) {
-            // El registro se actualizó exitosamente.
             res.status(200).json({ message: 'Reserva actualizada correctamente' });
         } else {
             res.status(404).json({ message: 'Reserva no encontrada' });

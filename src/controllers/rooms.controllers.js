@@ -30,13 +30,10 @@ export const createRooms=async(req,res)=>{
         console.log(req.params)
         const { numero, tipo, valor } = req.body;
 
-        // Se Realiza una validación básica de los datos aquí.
-
         const [rows] = await pool.query('INSERT INTO rooms (numero, tipo, valor ) VALUES (?, ?, ?, ?, ?, ?, ?)'
             , [numero, tipo, valor]);
 
         if (rows.affectedRows === 1) {
-            // El registro se creó exitosamente.
             res.status(201).json({ message: 'Habitacion creada correctamente' });
         } else {
             res.status(500).json({ message: 'No se pudo crear la habitacion' });
@@ -51,13 +48,11 @@ export const updateRooms=async(req,res)=>{
         const { id } = req.params;
         const {  numero, tipo, valor } = req.body;
 
-        // Se Realiza una validación básica de los datos aquí.
 
         const [rows] = await pool.query('UPDATE rooms SET  numero=?, tipo=?, valor=? WHERE id=?',
             [ numero, tipo, valor]);
 
         if (rows.affectedRows === 1) {
-            // El registro se actualizó exitosamente.
             res.status(200).json({ message: 'habitacion actualizada correctamente' });
         } else {
             res.status(404).json({ message: 'habitacion no encontrada' });
