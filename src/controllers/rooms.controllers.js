@@ -11,7 +11,6 @@ export const getRooms = async (req, res) =>{
 }
 
 export const getRoomsId = async (req, res) =>{
-    console.log(req.params)
     const { id } = req.params
     try {
         const [rows] = await pool.query('SELECT * FROM rooms WHERE id=?', [id])
@@ -25,12 +24,11 @@ export const getRoomsId = async (req, res) =>{
 }
 
 export const createRooms=async(req,res)=>{
-    try {
         const { id } = req.params
-        console.log(req.params)
         const { numero, tipo, valor } = req.body;
+        try {
 
-        const [rows] = await pool.query('INSERT INTO rooms (numero, tipo, valor ) VALUES (?, ?, ?, ?, ?, ?, ?)'
+        const [rows] = await pool.query('INSERT INTO rooms (numero, tipo, valor ) VALUES (?, ?, ?)'
             , [numero, tipo, valor]);
 
         if (rows.affectedRows === 1) {
@@ -48,22 +46,22 @@ export const updateRooms=async(req,res)=>{
         const { id } = req.params;
         const {  numero, tipo, valor } = req.body;
 
+        const [result] = await pool.query('UPDATE rooms SET  numero=?, tipo=?, valor=? WHERE id=?',
+        [ numero, tipo, valor,id]);
 
-        const [rows] = await pool.query('UPDATE rooms SET  numero=?, tipo=?, valor=? WHERE id=?',
-            [ numero, tipo, valor]);
+    if (result.affectedRows <=0)return res.status(404).json({ 
+        message: 'Habitacion actualizada correctamente' 
+    });
 
-        if (rows.affectedRows === 1) {
-            res.status(200).json({ message: 'habitacion actualizada correctamente' });
-        } else {
-            res.status(404).json({ message: 'habitacion no encontrada' });
-        }
+    const [rows] = await pool.query('SELECT * FROM rooms  WHERE id=?',[id]);
+    res.json(rows[0]);
+
     } catch (error) {
         res.status(500).json({ message: 'Ha ocurrido un error' });
     }
 }
 
 export const deleteRoomsId=async(req,res)=>{
-    console.log(req.params)
     const { id } = req.params
     try {
         const [result] = await pool.query('DELETE FROM rooms WHERE id=?', [id])
